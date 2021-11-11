@@ -1,13 +1,10 @@
 package com.sparta.springcore.service;
 
-//package com.sparta.springcore;
-
 import com.sparta.springcore.dto.ProductMypriceRequestDto;
 import com.sparta.springcore.dto.ProductRequestDto;
 import com.sparta.springcore.model.Product;
 import com.sparta.springcore.repository.ProductRepository;
-
-//package com.sparta.springcore;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,9 +14,10 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     // 생성자: ProductService() 가 생성될 때 호출됨
-    public ProductService() {
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
         // 멤버 변수 생성
-        this.productRepository = new ProductRepository();
+        this.productRepository = productRepository;
     }
 
     public List<Product> getProducts() throws SQLException {
@@ -27,9 +25,9 @@ public class ProductService {
         return productRepository.getProducts();
     }
 
-    public Product createProduct(ProductRequestDto requestDto) throws SQLException {
+    public Product createProduct(ProductRequestDto requestDto, Long userId) throws SQLException {
         // 요청받은 DTO 로 DB에 저장할 객체 만들기
-        Product product = new Product(requestDto);
+        Product product = new Product(requestDto, userId);
         productRepository.createProduct(product);
         return product;
     }
